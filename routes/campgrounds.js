@@ -7,7 +7,7 @@ const { isLogedIn, validateCampground, isAuthor } = require('../middleware');
 const { storage } = require('../cloudinary') // node auto looking for index file
 //require multer for handling multipart/form-data [upload file]
 const multer = require('multer');
-const upload = multer({ storage })
+const upload = multer({ storage });
 
 // controller
 const campgrounds = require('../controllers/campgrounds');
