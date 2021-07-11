@@ -1,5 +1,4 @@
-const camp = JSON.parse(jsonCamp);
-
+// const camp = JSON.parse(jsonCamp);
 mapboxgl.accessToken = mapToken;
 const map = new mapboxgl.Map({
     container: 'map', // container ID
@@ -9,8 +8,8 @@ const map = new mapboxgl.Map({
 });
 
 const popup = new mapboxgl.Popup({ offset: 25 })
-
     .setHTML(`<h3>${camp.title}</h3><p>${camp.location}</p>`);
+
 new mapboxgl.Marker()
     .setLngLat(camp.geometry.coordinates)
     .setPopup(popup)
