@@ -1,6 +1,6 @@
 const Campground = require('../models/campground');
 
-const { cloudinary } = require('../cloudinary');
+const { cloudinary, storage } = require('../cloudinary');
 
 
 const mapboxToken = process.env.MAPBOX_TOKEN;
@@ -19,18 +19,21 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createCampground = async (req, res) => {
     const { campground } = req.body;
-    const images = req.files.map(f => ({ url: f.path, filename: f.filename }))
     const geoData = await geoCoder.forwardGeocode({
         query: campground.location,
         limit: 1
     }).send();
     const geometry = geoData.body.features[0].geometry;
+    if(!geometry){
+        req.flash('error', 'No coordinates data!');
+        return res.redirect('/campgrounds/new');
+    }
     const newCampground = new Campground(campground);
     newCampground.author = req.user._id;
+    const images = req.files.map(f => ({ url: f.path, filename: f.filename }))
     newCampground.images = images;
     newCampground.geometry = geometry;
     await newCampground.save();
-    console.log(newCampground)
     req.flash('success', 'Successfully made a Campground!');
     res.redirect(`/campgrounds/${newCampground._id}`);
 }
